@@ -1,1 +1,88 @@
+from docx import Document
+from docx.shared import Pt
+from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
 
+def create_cv(personal_info, education, experience, skills):
+    # Create a new Document
+    doc = Document()
+
+    # Set font size for the entire document
+    doc.styles['Normal'].font.size = Pt(11)
+
+    # Adding Personal Information
+    doc.add_heading('Personal Information', level=1)
+    for key, value in personal_info.items():
+        doc.add_paragraph(f"{key}: {value}")
+
+    # Adding Education
+    doc.add_heading('Education', level=1)
+    for edu in education:
+        doc.add_paragraph(f"{edu['degree']}, {edu['institution']}, {edu['dates']}")
+
+    # Adding Work Experience
+    doc.add_heading('Work Experience', level=1)
+    for exp in experience:
+        doc.add_paragraph(f"{exp['position']}, {exp['company']}, {exp['dates']}")
+        for duty in exp['duties']:
+            doc.add_paragraph(f"- {duty}")
+
+    # Adding Skills
+    doc.add_heading('Skills', level=1)
+    for skill, level in skills.items():
+        doc.add_paragraph(f"{skill}: {level}")
+# Save the document
+    doc.save('generated_cv.docx')
+    print("CV generated successfully!")
+
+# Example data
+personal_info = {
+    'Name': 'John Doe',
+    'Address': '123 Main Street, City, State, Zip',
+    'Phone': '(123) 456-7890',
+    'Email': 'johndoe@example.com',
+}
+
+education = [
+    {
+        'degree': 'Bachelor of Science in Computer Science',
+        'institution': 'University of Example',
+        'dates': 'May 2015 - May 2019',
+    },
+    {
+        'degree': 'High School Diploma',
+        'institution': 'Example High School',
+        'dates': 'September 2011 - May 2015',
+    },
+]
+
+experience = [
+    {
+        'position': 'Software Engineer',
+        'company': 'Tech Company X',
+        'dates': 'June 2019 - Present',
+'duties': [
+            'Developed and maintained web applications using Django and React.',
+            'Collaborated with team members on various projects.',
+            'Participated in code reviews and testing processes.',
+        ],
+    },
+    {
+        'position': 'Intern',
+        'company': 'Software Solutions Inc.',
+        'dates': 'May 2018 - August 2018',
+        'duties': [
+            'Assisted in software testing and debugging.',
+            'Learned about software development life cycle (SDLC) processes.',
+        ],
+    },
+]
+
+skills = {
+    'Programming Languages': 'Python, JavaScript, Java',
+    'Web Development': 'HTML/CSS, React, Django',
+    'Database Management': 'SQL, MongoDB',
+'Tools': 'Git, Docker',
+}
+
+# Generate the CV
+create_cv(personal_info, education, experience, skills)
